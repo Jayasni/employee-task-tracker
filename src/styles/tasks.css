@@ -1,0 +1,126 @@
+
+/* Task page */
+.task-page {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Task form and list layout */
+.task-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) 2fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* Task form */
+.task-form {
+  padding: 24px;
+  background: #25272D;
+  border: 1px solid #383A42;
+  border-radius: 16px;
+}
+
+/* Task inputs */
+.task-input {
+  width: 100%;
+  padding: 12px 14px;
+  color: #F5F5F5;
+  background: #18191D;
+  border: 1px solid #383A42;
+  border-radius: 10px;
+  outline: none;
+}
+
+.task-input:focus {
+  border-color: #FF914D;
+}
+
+/* Task list */
+.task-list {
+  overflow: hidden;
+  background: #25272D;
+  border: 1px solid #383A42;
+  border-radius: 16px;
+}
+
+/* Task table */
+.task-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.task-table th {
+  padding: 16px;
+  color: #A5A6AD;
+  background: #18191D;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.task-table td {
+  padding: 16px;
+  border-top: 1px solid #383A42;
+  color: #F5F5F5;
+  font-size: 14px;
+}
+
+.task-table tr:hover td {
+  background: #303138;
+}
+
+/* Priority labels */
+.priority-high {
+  color: #F07878;
+  background: rgba(240, 120, 120, 0.15);
+}
+
+.priority-medium {
+  color: #F6C76A;
+  background: rgba(246, 199, 106, 0.15);
+}
+
+.priority-low {
+  color: #55C99A;
+  background: rgba(85, 201, 154, 0.15);
+}
+
+/* Status labels */
+.status-pending {
+  color: #F6C76A;
+  background: rgba(246, 199, 106, 0.15);
+}
+
+.status-progress {
+  color: #75BDF2;
+  background: rgba(117, 189, 242, 0.15);
+}
+
+.status-completed {
+  color: #55C99A;
+  background: rgba(85, 201, 154, 0.15);
+}
+
+/* Create task button */
+.task-add-btn {
+  width: 100%;
+  padding: 13px;
+  color: #18191D;
+  background: #FF914D;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.task-add-btn:hover {
+  background: #F47C35;
+}
+
+@media (max-width: 1100px) {
+  .task-layout {
+    grid-template-columns: 1fr;
+  }
+}

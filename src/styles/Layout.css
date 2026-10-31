@@ -1,0 +1,73 @@
+
+@theme {
+  --color-app: #18191D;
+  --color-sidebar: #202126;
+  --color-panel: #25272D;
+  --color-panel-hover: #303138;
+
+  --color-orange: #FF914D;
+  --color-orange-light: #FFC078;
+  --color-orange-hover: #F47C35;
+
+  --color-success: #55C99A;
+  --color-warning: #F6C76A;
+  --color-danger: #F07878;
+  --color-info: #75BDF2;
+
+  --color-main-text: #F5F5F5;
+  --color-muted: #A5A6AD;
+  --color-line: #383A42;
+}
+
+/* Global styles */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: #18191D;
+  color: #F5F5F5;
+  font-family: Inter, Arial, sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+::selection {
+  background: #FF914D;
+  color: #18191D;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #202126;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #555761;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FF914D;
+}

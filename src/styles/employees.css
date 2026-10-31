@@ -1,0 +1,95 @@
+
+/* Employee page */
+.employee-page {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Employee form and list layout */
+.employee-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) 2fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* Form card */
+.employee-form {
+  padding: 24px;
+  background: #25272D;
+  border: 1px solid #383A42;
+  border-radius: 16px;
+}
+
+/* Form input */
+.employee-input {
+  width: 100%;
+  padding: 12px 14px;
+  color: #F5F5F5;
+  background: #18191D;
+  border: 1px solid #383A42;
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.employee-input:focus {
+  border-color: #FF914D;
+}
+
+/* Employee list */
+.employee-list {
+  overflow: hidden;
+  background: #25272D;
+  border: 1px solid #383A42;
+  border-radius: 16px;
+}
+
+/* Employee table */
+.employee-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.employee-table th {
+  padding: 16px;
+  color: #A5A6AD;
+  background: #18191D;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.employee-table td {
+  padding: 16px;
+  border-top: 1px solid #383A42;
+  color: #F5F5F5;
+  font-size: 14px;
+}
+
+.employee-table tr:hover td {
+  background: #303138;
+}
+
+/* Add button */
+.employee-add-btn {
+  width: 100%;
+  padding: 13px;
+  color: #18191D;
+  background: #FF914D;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.employee-add-btn:hover {
+  background: #F47C35;
+}
+
+@media (max-width: 1100px) {
+  .employee-layout {
+    grid-template-columns: 1fr;
+  }
+}
