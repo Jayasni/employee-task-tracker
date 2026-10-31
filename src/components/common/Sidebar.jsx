@@ -6,53 +6,31 @@ import {
   ClipboardList,
   BriefcaseBusiness,
   Settings,
-  Layers
 } from "lucide-react";
 
 const menuItems = [
-  {
-    name: "Dashboard",
-    path: "/",
-    icon: LayoutDashboard,
-  },
-  {
-    name: "Employees",
-    path: "/employees",
-    icon: Users,
-  },
-  {
-    name: "Tasks",
-    path: "/tasks",
-    icon: ClipboardList,
-  },
+  { name: "Dashboard", path: "/", icon: LayoutDashboard },
+  { name: "Employees", path: "/employees", icon: Users },
+  { name: "Tasks", path: "/tasks", icon: ClipboardList },
+  { name: "Settings", path: "/settings", icon: Settings },
 ];
 
-function Sidebar() {
+export default function Sidebar() {
   return (
-    <aside className="flex min-h-screen w-64 shrink-0 flex-col border-r border-line bg-sidebar px-5 py-6">
-
-      {/* Logo */}
-      <div className="mb-10 flex items-center gap-3">
-        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange text-app">
+    <aside className="app-sidebar">
+      <div className="sidebar-brand">
+        <div className="brand-icon">
           <BriefcaseBusiness size={23} />
         </div>
-
         <div>
-          <h1 className="text-lg font-bold text-main-text">
-            TaskFlow
-          </h1>
-          <p className="text-xs text-muted">
-            Employee Management
-          </p>
+          <h2>TaskFlow</h2>
+          <p>Employee Management</p>
         </div>
       </div>
 
-      {/* Navigation */}
-      <div className="mb-4 text-xs font-semibold uppercase tracking-wider text-muted">
-        Main Menu
-      </div>
+      <div className="sidebar-section-label">WORKSPACE</div>
 
-      <nav className="flex flex-col gap-2">
+      <nav className="sidebar-nav">
         {menuItems.map((item) => {
           const Icon = item.icon;
 
@@ -62,11 +40,7 @@ function Sidebar() {
               to={item.path}
               end={item.path === "/"}
               className={({ isActive }) =>
-                `flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition ${
-                  isActive
-                    ? "bg-orange text-app shadow-lg shadow-orange/10"
-                    : "text-muted hover:bg-panel-hover hover:text-main-text"
-                }`
+                `sidebar-link ${isActive ? "active" : ""}`
               }
             >
               <Icon size={19} />
@@ -76,30 +50,18 @@ function Sidebar() {
         })}
       </nav>
 
-      {/* Bottom section */}
-      <div className="mt-auto">
-        <div className="mb-3 border-t border-line pt-5">
-          <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm text-muted transition hover:bg-panel-hover hover:text-main-text">
-            <Settings size={19} />
-            Settings
-          </button>
-        </div>
-
-        <div className="rounded-xl border border-line bg-panel p-4">
-          <div className="mb-2 flex items-center gap-2">
-            <Layers size={18} className="text-orange" />
-            <span className="text-sm font-semibold text-main-text">
-              TaskFlow
-            </span>
+      <div className="sidebar-bottom">
+        <div className="sidebar-help">
+          <div className="help-icon">
+            <Settings size={18} />
           </div>
-          <p className="text-xs leading-5 text-muted">
-            Manage employees and track your team's progress.
-          </p>
+          <div>
+            <strong>Stay organized</strong>
+            <p>Manage your team's work</p>
+          </div>
         </div>
+        <p className="sidebar-footer">© 2026 TaskFlow</p>
       </div>
-
     </aside>
   );
 }
-
-export default Sidebar;

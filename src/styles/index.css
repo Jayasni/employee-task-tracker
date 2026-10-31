@@ -1,8 +1,7 @@
-
 @import "tailwindcss";
-
 @import "./theme.css";
 @import "./layout.css";
 @import "./dashboard.css";
 @import "./employees.css";
 @import "./tasks.css";
+@import "./settings.css";

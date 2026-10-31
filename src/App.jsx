@@ -1,27 +1,26 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
-// Common components
-import Sidebar from "./components/common/sidebar";
-import Header from "./components/common/header";
+import Sidebar from "./components/common/sidebar.jsx";
+import Header from "./components/common/header.jsx";
 
-// Pages
-import Dashboard from "./pages/Dashboard";
-import Employees from "./pages/Employee";
-import Tasks from "./pages/Tasks";
-
-function App() {
+import Dashboard from "./pages/Dashboard.jsx";
+import Employees from "./pages/Employee.jsx";
+import Tasks from "./pages/Tasks.jsx";
+import Settings from "./pages/Settings.jsx";
+export default function App() {
   return (
-    <div className="flex min-h-screen bg-app text-main-text">
+    <div className="app-layout">
       <Sidebar />
 
-      <main className="min-w-0 flex-1">
+      <main className="app-main">
         <Header />
 
-        <div className="p-5 md:p-8">
+        <div className="page-content">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/employees" element={<Employees />} />
             <Route path="/tasks" element={<Tasks />} />
+            <Route path="/settings" element={<Settings />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
@@ -29,5 +28,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
