@@ -16,8 +16,7 @@ load_dotenv()
 
 # Frontend URLs allowed to access the backend
 origins = [
-    "http://localhost:5173",
-   "https://employee-task-tracker-hazel.vercel.app",]
+   "https://employee-task-tracker-hazel.vercel.app/",]
 
 # Add frontend URL from environment variables
 frontend_url = os.getenv("FRONTEND_URL")
