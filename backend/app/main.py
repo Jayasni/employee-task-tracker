@@ -1,20 +1,26 @@
+
 import os
 from dotenv import load_dotenv
 
 from fastapi import FastAPI
-from sqlalchemy import text
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text
 
 from app.database import engine, Base
 from app import models
 from app.routers import employees, tasks
 
-# Load environment variables
+
+# Load environment variables from backend/.env
 load_dotenv()
 
-# Read frontend URL
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
+# Read frontend URL from environment
+FRONTEND_URL = os.getenv(
+    "FRONTEND_URL",
+    "http://localhost:5173"
+)
 
+# Initialize FastAPI
 app = FastAPI(
     title="Employee Task Tracker API",
     description="Manage employees and their assigned tasks",
@@ -23,7 +29,7 @@ app = FastAPI(
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
-# Register routers
+# Register API routers
 app.include_router(employees.router)
 app.include_router(tasks.router)
 
@@ -35,6 +41,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+# Home route
 @app.get("/")
 def home():
     return {
@@ -42,9 +51,9 @@ def home():
     }
 
 
+# Database connection test
 @app.get("/test-db")
 def test_database():
-
     try:
         with engine.connect() as connection:
             connection.execute(text("SELECT 1"))
