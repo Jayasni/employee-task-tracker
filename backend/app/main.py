@@ -1,47 +1,41 @@
-
 import os
 from dotenv import load_dotenv
+from sqlalchemy import text
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import text
 
 from app.database import engine, Base
 from app import models
 from app.routers import employees, tasks
 
-
-# Load environment variables from backend/.env
 load_dotenv()
 
-# Read frontend URL from environment
-FRONTEND_URL = os.getenv(
-    "FRONTEND_URL",
-    "http://localhost:5173"
-)
+app = FastAPI(title="Employee Task Tracker API")
 
-# Initialize FastAPI
-app = FastAPI(
-    title="Employee Task Tracker API",
-    description="Manage employees and their assigned tasks",
-)
+# Allow deployed frontend and local development
+origins = [
+    "http://localhost:5173",
+    "https://employee-task-tracker-git-main-jayasni.vercel.app",
+]
 
-# Create database tables
-Base.metadata.create_all(bind=engine)
+# Read additional frontend URL from environment variable
+frontend_url = os.getenv("FRONTEND_URL")
 
-# Register API routers
-app.include_router(employees.router)
-app.include_router(tasks.router)
+if frontend_url and frontend_url not in origins:
+    origins.append(frontend_url)
 
-# Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[FRONTEND_URL],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Register routers
+app.include_router(employees.router)
+app.include_router(tasks.router)
 
 # Home route
 @app.get("/")
