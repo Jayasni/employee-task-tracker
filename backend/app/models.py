@@ -4,7 +4,8 @@ from sqlalchemy import (
     String,
     Text,
     Date,
-    ForeignKey
+    ForeignKey,
+    Boolean
 )
 from sqlalchemy.orm import relationship
 
@@ -61,3 +62,19 @@ class Task(Base):
         "Employee",
         back_populates="tasks"
     )
+
+class AdminSettings(Base):
+    __tablename__ = "admin_settings"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    admin_name = Column(String(100), nullable=False, default="Admin")
+    email = Column(String(150), nullable=False, default="admin@example.com")
+
+    task_updates = Column(Boolean, default=True, nullable=False)
+    overdue_reminders = Column(Boolean, default=True, nullable=False)
+
+    default_priority = Column(String(20), default="Medium", nullable=False)
+
+    compact_view = Column(Boolean, default=False, nullable=False)
+    appearance = Column(String(20), default="beige", nullable=False)

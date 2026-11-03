@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
+from app.schemas import SettingsBase
 
 from app import models, schemas
 # CREATE EMPLOYEE
@@ -127,3 +128,36 @@ def delete_task(db: Session, task_id: int):
     db.commit()
 
     return db_task
+
+def get_admin_settings(db: Session):
+    settings = (
+        db.query(models.AdminSettings)
+        .filter(models.AdminSettings.id == 1)
+        .first()
+    )
+
+    # Create default settings if they don't exist
+    if not settings:
+        settings = models.AdminSettings(id=1)
+        db.add(settings)
+        db.commit()
+        db.refresh(settings)
+
+    return settings
+
+
+def update_admin_settings(
+    db: Session,
+    settings_data: SettingsBase
+):
+    settings = get_admin_settings(db)
+
+    update_data = settings_data.model_dump()
+
+    for key, value in update_data.items():
+        setattr(settings, key, value)
+
+    db.commit()
+    db.refresh(settings)
+
+    return settings

@@ -1,5 +1,7 @@
 
 import { useEffect, useState } from "react";
+import axios from "axios";
+
 import {
   UserRound,
   Bell,
@@ -8,6 +10,9 @@ import {
   Database,
   Save,
 } from "lucide-react";
+
+// Backend API URL
+const API_URL = import.meta.env.VITE_API_URL;
 
 const defaultSettings = {
   adminName: "Admin",
@@ -20,21 +25,43 @@ const defaultSettings = {
 };
 
 export default function Settings() {
-  const [settings, setSettings] = useState(() => {
-    try {
-      const stored = localStorage.getItem("trackerSettings");
+  const [settings, setSettings] = useState(defaultSettings);
 
-      return stored
-        ? { ...defaultSettings, ...JSON.parse(stored) }
-        : defaultSettings;
-    } catch {
-      return defaultSettings;
-    }
-  });
-
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState("");
 
-  // Apply selected theme immediately
+  // Fetch settings from FastAPI when page loads
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await axios.get(
+          `${API_URL}/api/settings/`
+        );
+
+        setSettings({
+          ...defaultSettings,
+          ...response.data,
+        });
+      } catch (err) {
+        console.error("Error fetching settings:", err);
+
+        setError(
+          "Failed to load settings. Please check the backend."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSettings();
+  }, []);
+
+  // Apply selected theme
   useEffect(() => {
     document.documentElement.setAttribute(
       "data-theme",
@@ -42,7 +69,7 @@ export default function Settings() {
     );
   }, [settings.appearance]);
 
-  // Update settings
+  // Update settings in React state
   const handleChange = (key, value) => {
     setSettings((previous) => ({
       ...previous,
@@ -50,28 +77,82 @@ export default function Settings() {
     }));
 
     setSaved(false);
+    setError("");
   };
 
-  // Save settings
-  const handleSave = () => {
-    localStorage.setItem(
-      "trackerSettings",
-      JSON.stringify(settings)
+  // Save settings to PostgreSQL through FastAPI
+  const handleSave = async () => {
+    try {
+      setSaving(true);
+      setError("");
+      setSaved(false);
+
+      const response = await axios.put(
+        `${API_URL}/api/settings/`,
+        settings
+      );
+
+      setSettings({
+        ...defaultSettings,
+        ...response.data,
+      });
+
+      setSaved(true);
+    } catch (err) {
+      console.error("Error saving settings:", err);
+
+      setError(
+        "Failed to save settings. Please try again."
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // Reset settings in the backend
+  const handleReset = async () => {
+    try {
+      setSaving(true);
+      setError("");
+      setSaved(false);
+
+      const response = await axios.put(
+        `${API_URL}/api/settings/`,
+        defaultSettings
+      );
+
+      setSettings({
+        ...defaultSettings,
+        ...response.data,
+      });
+
+      setSaved(true);
+    } catch (err) {
+      console.error("Error resetting settings:", err);
+
+      setError(
+        "Failed to reset settings. Please try again."
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="settings-page">
+        <p>Loading settings...</p>
+      </div>
     );
-
-    setSaved(true);
-  };
-
-  // Reset settings
-  const handleReset = () => {
-    setSettings(defaultSettings);
-    localStorage.removeItem("trackerSettings");
-    setSaved(false);
-  };
+  }
 
   return (
-    <div className={`settings-page ${settings.compactView ? "compact-view" : ""}`}>
-
+    <div
+      className={`settings-page ${
+        settings.compactView ? "compact-view" : ""
+      }`}
+    >
       <div className="settings-intro">
         <h2>Application Settings</h2>
         <p>Manage your profile and application preferences.</p>
@@ -81,6 +162,7 @@ export default function Settings() {
       <section className="settings-card">
         <div className="settings-card-heading">
           <UserRound size={21} />
+
           <div>
             <h3>Profile Information</h3>
             <p>Manage your administrator details.</p>
@@ -90,6 +172,7 @@ export default function Settings() {
         <div className="settings-fields">
           <label>
             Full Name
+
             <input
               type="text"
               value={settings.adminName}
@@ -101,6 +184,7 @@ export default function Settings() {
 
           <label>
             Email Address
+
             <input
               type="email"
               value={settings.email}
@@ -116,6 +200,7 @@ export default function Settings() {
       <section className="settings-card">
         <div className="settings-card-heading">
           <Bell size={21} />
+
           <div>
             <h3>Notifications</h3>
             <p>Choose which reminders you want to enable.</p>
@@ -147,7 +232,10 @@ export default function Settings() {
             type="checkbox"
             checked={settings.overdueReminders}
             onChange={(e) =>
-              handleChange("overdueReminders", e.target.checked)
+              handleChange(
+                "overdueReminders",
+                e.target.checked
+              )
             }
           />
         </label>
@@ -157,6 +245,7 @@ export default function Settings() {
       <section className="settings-card">
         <div className="settings-card-heading">
           <ListChecks size={21} />
+
           <div>
             <h3>Task Preferences</h3>
             <p>Set your default task preferences.</p>
@@ -183,6 +272,7 @@ export default function Settings() {
       <section className="settings-card">
         <div className="settings-card-heading">
           <Palette size={21} />
+
           <div>
             <h3>Appearance</h3>
             <p>Choose your preferred application theme.</p>
@@ -198,7 +288,10 @@ export default function Settings() {
               handleChange("appearance", e.target.value)
             }
           >
-            <option value="beige">Beige & Terracotta</option>
+            <option value="beige">
+              Beige & Terracotta
+            </option>
+
             <option value="light">Light Theme</option>
             <option value="dark">Dark Theme</option>
           </select>
@@ -221,7 +314,9 @@ export default function Settings() {
         <label className="settings-toggle">
           <span>
             <strong>Compact View</strong>
-            <small>Reduce spacing inside the settings page.</small>
+            <small>
+              Reduce spacing inside the settings page.
+            </small>
           </span>
 
           <input
@@ -238,6 +333,7 @@ export default function Settings() {
       <section className="settings-card">
         <div className="settings-card-heading">
           <Database size={21} />
+
           <div>
             <h3>Application Information</h3>
             <p>Project technology details.</p>
@@ -245,11 +341,25 @@ export default function Settings() {
         </div>
 
         <div className="app-info">
-          <p><strong>Application:</strong> Employee Task Tracker</p>
-          <p><strong>Frontend:</strong> React + Vite</p>
-          <p><strong>Backend:</strong> Python + FastAPI</p>
-          <p><strong>Database:</strong> PostgreSQL</p>
-          <p><strong>Version:</strong> 1.0.0</p>
+          <p>
+            <strong>Application:</strong> Employee Task Tracker
+          </p>
+
+          <p>
+            <strong>Frontend:</strong> React + Vite
+          </p>
+
+          <p>
+            <strong>Backend:</strong> Python + FastAPI
+          </p>
+
+          <p>
+            <strong>Database:</strong> PostgreSQL
+          </p>
+
+          <p>
+            <strong>Version:</strong> 1.0.0
+          </p>
         </div>
       </section>
 
@@ -258,6 +368,7 @@ export default function Settings() {
         <button
           className="reset-button"
           onClick={handleReset}
+          disabled={saving}
         >
           Reset
         </button>
@@ -265,15 +376,25 @@ export default function Settings() {
         <button
           className="save-button"
           onClick={handleSave}
+          disabled={saving}
         >
           <Save size={17} />
-          Save Changes
+
+          {saving ? "Saving..." : "Save Changes"}
         </button>
       </div>
 
+      {/* Success Message */}
       {saved && (
         <p className="settings-success">
           Settings saved successfully!
+        </p>
+      )}
+
+      {/* Error Message */}
+      {error && (
+        <p className="settings-error">
+          {error}
         </p>
       )}
     </div>

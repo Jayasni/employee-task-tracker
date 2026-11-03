@@ -8,7 +8,7 @@ from sqlalchemy import text
 
 from app.database import engine, Base
 from app import models
-from app.routers import employees, tasks
+from app.routers import employees, tasks, settings
 
 
 # Load environment variables
@@ -51,6 +51,7 @@ Base.metadata.create_all(bind=engine)
 # Register routers
 app.include_router(employees.router)
 app.include_router(tasks.router)
+app.include_router(settings.router)
 
 
 # Home route

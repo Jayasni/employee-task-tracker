@@ -1,5 +1,5 @@
 
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, Field, EmailStr, ConfigDict
 from typing import Optional
 from datetime import date
 
@@ -80,3 +80,32 @@ class TaskResponse(BaseModel):
     employee_name: str
 
     model_config = {"from_attributes": True}
+
+class SettingsBase(BaseModel):
+    admin_name: str = Field(default="Admin", alias="adminName")
+    email: str = Field(default="admin@example.com", alias="email")
+
+    task_updates: bool = Field(default=True, alias="taskUpdates")
+    overdue_reminders: bool = Field(
+        default=True,
+        alias="overdueReminders"
+    )
+
+    default_priority: str = Field(
+        default="Medium",
+        alias="defaultPriority"
+    )
+
+    compact_view: bool = Field(default=False, alias="compactView")
+    appearance: str = "beige"
+
+    model_config = ConfigDict(populate_by_name=True)
+
+
+class SettingsResponse(SettingsBase):
+    id: int
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True
+    )
