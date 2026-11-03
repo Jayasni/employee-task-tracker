@@ -14,9 +14,14 @@ from app.routers import employees, tasks, settings
 # Load environment variables
 load_dotenv()
 
+
 # Frontend URLs allowed to access the backend
 origins = [
-   "https://employee-task-tracker-hazel.vercel.app/",]
+    "http://localhost:5173",
+    "https://employee-task-tracker-hazel.vercel.app",
+    "https://employee-task-tracker-lvj1pzjjz-jayasni.vercel.app",
+]
+
 
 # Add frontend URL from environment variables
 frontend_url = os.getenv("FRONTEND_URL")
